@@ -4,7 +4,7 @@ auth.onAuthStateChanged(user => {
     console.log('user logged in: ', user);
     db.collection('guides').get().then(snapshot => {
       setupGuides(snapshot.docs);
-    }, err => console.log(err.message));
+    });
   } else {
     console.log('user logged out');
     setupGuides([]);
