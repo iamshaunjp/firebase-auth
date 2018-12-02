@@ -9,8 +9,7 @@ signupForm.addEventListener('submit', (e) => {
 
   // sign up the user
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
-    // console.log(cred.user);
-  }).then(() => {
+    console.log(cred.user);
     // close the signup modal & reset form
     const modal = document.querySelector('#modal-signup');
     M.Modal.getInstance(modal).close();
