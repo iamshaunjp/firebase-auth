@@ -6,8 +6,9 @@
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <title>GameGuidez</title>
+
 </head>
-<body class="grey lighten-3"">
+<body class="grey lighten-3">
 
   <!-- NAVBAR -->
   <nav class="z-depth-0 grey lighten-4">
@@ -77,7 +78,6 @@
     <div class="modal-content center-align">
       <h4>Account details</h4><br />
       <div class="account-details"></div>
-      <div class="account-extras"></div>
     </div>
   </div>
 
@@ -120,6 +120,36 @@
       </li>
     </ul>
   </div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyB4-ExW78OsOlKKNSx-oOrvN1C_SgFNkiw",
+    authDomain: "game-firebase-auth.firebaseapp.com",
+    projectId: "game-firebase-auth",
+    appId: "1:195541689848:web:1b37bc6199abe6617de20d",
+    measurementId: "G-86JEG3YBJ4"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+  // making refences
+  const auth = firebase.auth()
+  const db = firebase.firestore()
+  db.settings({
+    timestampsInSnapshots:true
+  })
+</script>
   
   <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
