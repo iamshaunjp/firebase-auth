@@ -1,13 +1,43 @@
+//access to the  elements class with logged in and logged out
+const loggedInLinks = document.querySelectorAll('.logged-in')
+const loggedOutLinks = document.querySelectorAll('.logged-out')
+
+//to toggle depending on the situation
+
+const setUpUi = (user) => {
+    if (user) {
+        loggedInLinks.forEach(item => {
+            item.style.display = 'block'
+        });
+
+        loggedOutLinks.forEach(item => {
+            item.hidden = true
+        });
+
+    } else {
+        loggedInLinks.forEach(item => {
+            item.hidden = true
+        });
+
+        loggedOutLinks.forEach(item => {
+            item.style.display = 'block'
+        });
+    }
+}
+
+
 // listen for auth status change
 auth.onAuthStateChanged(user => {
-    if(user){
+    if (user) {
         //to get and addd guides with firestore
         db.collection('guides').get().then((snapshot) => {
             console.log(snapshot.docs)
             renderGuide(snapshot.docs)
+            setUpUi(user)
         })
-    }else{
+    } else {
         renderGuide([])
+        setUpUi()
     }
 
     (user) ? console.log('user is loggedin', user) : console.log('user is logged out')
@@ -62,6 +92,27 @@ login.addEventListener('submit', e => {
         M.Modal.getInstance(modal).close();
         login.reset();
     })
+
+})
+
+
+//create new guides
+
+let guideForm = document.querySelector('#create-form')
+guideForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    db.collection('guides').add({
+        title: guideForm['title'].value,
+        content: guideForm['content'].value
+    }).then(() => {
+        const modal = document.querySelector('#modal-create')
+        M.Modal.getInstance(modal).close();
+        guideForm.reset()
+    })
+
+
+
 
 })
 
