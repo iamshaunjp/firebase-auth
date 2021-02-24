@@ -1,3 +1,7 @@
+//account display
+let account = document.querySelector(".account-details")
+
+
 //access to the  elements class with logged in and logged out
 const loggedInLinks = document.querySelectorAll('.logged-in')
 const loggedOutLinks = document.querySelectorAll('.logged-out')
@@ -5,7 +9,22 @@ const loggedOutLinks = document.querySelectorAll('.logged-out')
 //to toggle depending on the situation
 
 const setUpUi = (user) => {
+
     if (user) {
+        // to get bio display
+        // to access the database to display bio
+        db.collection('users').doc(user.uid).get().then((doc)=>{
+            const html = `
+            <div> logged in as : ${user.email} </div>
+            <div> ${doc.data().bio} </div>
+
+        `;
+        account.innerHTML = html
+
+        })
+          
+
+        // if i am logged in display the logged in links 
         loggedInLinks.forEach(item => {
             item.style.display = 'block'
         });
@@ -22,18 +41,24 @@ const setUpUi = (user) => {
         loggedOutLinks.forEach(item => {
             item.style.display = 'block'
         });
+
+        account.innerHTML = ''
     }
 }
 
 
 // listen for auth status change
 auth.onAuthStateChanged(user => {
+    console.log(user)
     if (user) {
         //to get and addd guides with firestore
-        db.collection('guides').get().then((snapshot) => {
+        // for realtime data change .get == .onsnapshot
+        db.collection('guides').onSnapshot((snapshot) => {
             console.log(snapshot.docs)
             renderGuide(snapshot.docs)
             setUpUi(user)
+        }, err => {
+            console.log(err)
         })
     } else {
         renderGuide([])
@@ -59,12 +84,20 @@ signupForm.addEventListener('submit', (e) => {
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
 
+
     //values inputed
     console.log(email, password)
 
     //sign up the user into the firebase auth
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
         console.log(cred)
+
+        //for the bio i will create a users collection and add a biography field
+        return db.collection('users').doc(cred.user.uid).set({
+            bio:signupForm["signup-bio"].value
+        });
+
+    }).then(() => {
         const modal = document.querySelector('#modal-signup')
         M.Modal.getInstance(modal).close();
         signupForm.reset();
